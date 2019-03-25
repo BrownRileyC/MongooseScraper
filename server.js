@@ -54,7 +54,7 @@ app.get('/api/scrape', function (req, res) {
       console.log(result);
       result.summary = $(this).children('div').text();
       console.log(result);
-      result.link = $(this).children('h4').children('a').attr('href');
+      result.link = 'http://dnd.wizards.com'+$(this).children('h4').children('a').attr('href');
       console.log(result);
 
       db.Article.create(result)
