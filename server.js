@@ -2,27 +2,17 @@ require('dotenv').config();
 var express = require("express");
 // var logger = require("morgan");
 var mongoose = require("mongoose");
-
-// Our scraping tools
-// Axios is a promised-based http library, similar to jQuery's Ajax method
-// It works on the client and on the server
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-// Require all models
 var db = require("./models");
 
 var PORT = 3000;
 
-// Initialize Express
 var app = express();
 
-// Configure middleware
-
-// Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// Make public a static folder
 app.use(express.static("public"));
 
 var exphbs = require("express-handlebars");
@@ -36,6 +26,11 @@ var MONGODB_URI = process.env.MONGODB_URI ||process.env.mongoLocalhost;
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
+let htmlRoutes = require('./routes/htmlRoutes.js');
+let apiRoutes = require('./routes/apiRoutes.js');
+
+htmlRoutes(app);
+apiRoutes(app);
 
 // Start the server
 app.listen(PORT, function () {
