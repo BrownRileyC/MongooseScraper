@@ -1,0 +1,49 @@
+<div class="container-fluid">
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <h2>WotC Article Scraper</h2>
+        </div>
+        <div class="col-4">
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-info">Home page</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="jumbotron">
+    <h1 class="display-4">WotC Article Grabber</h1>
+    <p class="lead">Quickly Grab the most recent D&D articles</p>
+    <hr class="my-4">
+    <p>Once we've scraped 'em you can check 'em out and even leave notes!</p>
+    <a class="btn btn-primary btn-lg" href="#" role="button">Grab those Articles</a>
+</div>
+
+<div class="container-fluid article-card-holder">
+    {{#each article}}
+    {{#if article.saved}}
+    <div class="card" data-_id="{{this._id}}">
+        <h5 class="card-header">{{this.headline}}</h5>
+        <div class="card-body">
+            <p class="card-text">{{this.summary}}</p>
+            <div class="row justify-content-around">
+                <div class="col">
+                   <a href="{{this.link}}" class="btn btn-primary" target="_blank">Check it out</a> 
+                </div>
+                <div class="col">
+                   <a href="#" class="btn btn-primary noteButton" target="_blank">Leave a note</a> 
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    {{/if}}
+    {{/each}}
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src='/public/js/saved.js'></script>
