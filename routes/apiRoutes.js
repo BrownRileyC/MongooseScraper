@@ -1,3 +1,5 @@
+const db = require('../models');
+
 module.exports = function (app) {
     app.get('/api/scrape', function (req, res) {
         axios.get("http://dnd.wizards.com/articles").then(function (response) {
