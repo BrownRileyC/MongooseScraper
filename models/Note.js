@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var NoteSchema = new Schema({
     text: {
         type: String,
+        trim: true,
         default: 'You forgot to enter a note it seems'
     }
 });

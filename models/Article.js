@@ -6,16 +6,19 @@ var ArticleSchema = new Schema({
 
   headline: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   summary: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   link: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
+      trim: true
   },
   status: {
       type: Boolean,
