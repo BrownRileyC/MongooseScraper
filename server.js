@@ -35,12 +35,26 @@ app.get('/', function (req, res) {
         article: dbArticles
       };
       res.render('index', hbsObject)
-    })
+    });
+});
+
+// Saved Route
+
+app.get('/saved', function (req, res) {
+  db.Article.find({status: true})
+    .then(function (dbSaved) {
+      let hbsObject = {
+        article: dbSaved
+      };
+      console.log(dbSaved[0].status);
+      res.render('saved', hbsObject);
+    });
 });
 
 // Scraper Route
 // Add ability to scrape the different types of articles to see more things
 app.get('/api/scrape', function (req, res) {
+
   axios.get("http://dnd.wizards.com/articles").then(function (response) {
     let $ = cheerio.load(response.data);
 
@@ -54,7 +68,7 @@ app.get('/api/scrape', function (req, res) {
       console.log(result);
       result.summary = $(this).children('div').text();
       console.log(result);
-      result.link = 'http://dnd.wizards.com'+$(this).children('h4').children('a').attr('href');
+      result.link = 'http://dnd.wizards.com' + $(this).children('h4').children('a').attr('href');
       console.log(result);
 
       db.Article.create(result)
@@ -67,13 +81,31 @@ app.get('/api/scrape', function (req, res) {
           console.log(err);
         });
     });
-    res.send('Scraped Articles Chief')
+    res.send('Scraped Articles, Chief')
   });
 });
 
-app.put('./api/save/:id', function(req, res) {
-
+app.post('/api/note/:id', function (req, res) {
+  db.Note.create(req.body).then(function(data){
+    return db.Article.findByIdAndUpdate({_id:req.params.id},  {note: data._id}, {new: true})
+  }).then(function(dbArticle){
+    res.json(dbArticle);
+  });
 })
+
+app.put('/api/save/:id', function (req, res) {
+  db.Article.findByIdAndUpdate(req.params.id, {$set: {status: true}}).then(function(data) {
+    console.log(data);
+    res.json(data);
+  });
+});
+
+app.put('/api/unsave/:id', function (req, res) {
+  db.Article.findByIdAndUpdate(req.params.id, {$set: {status: false}}).then(function(data) {
+    console.log(data);
+    res.json(data);
+  });
+});
 
 // Start the server
 app.listen(PORT, function () {
