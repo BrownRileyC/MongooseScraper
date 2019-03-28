@@ -101,6 +101,14 @@ app.post('/api/new/note/:id', function (req, res) {
   });
 });
 
+app.delete('/api/delete/:id', function (req, res) {
+  db.Note.findByIdAndDelete(req.params.id).then(function (data) {
+    db.Article.findOneAndUpdate({note: {_id: req.params.id}}, {$pull: {note: {_id: req.params.id}}}).then(function (data) {
+      res.json(data);
+    })
+  })
+})
+
 app.put('/api/save/:id', function (req, res) {
   db.Article.findByIdAndUpdate(req.params.id, {$set: {status: true}}).then(function(data) {
     console.log(data);

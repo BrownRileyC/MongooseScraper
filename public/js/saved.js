@@ -1,6 +1,10 @@
 $(document).ready(function () {
 
-    $('#noteModal').on('click', function () {
+    $('#myModal').on('hidden.bs.modal', function (e) {
+        $('.noteList').empty();
+      })
+
+    $('.noteModal').on('click', function () {
         let id = $(this).parents('.card').data();
         console.log(id);
         $('.saveButton').attr('data-id', id._id);
@@ -44,8 +48,25 @@ $(document).ready(function () {
         }).then(function (data) {
             console.log('Hey I came back');
             $('#myModal').modal('hide');
+            
         })
-    })
+    });
+
+    $('.noteList').on('click','.deleteNote', function () {
+        event.preventDefault();
+        console.log('Hey, I got clicked');
+
+        let id = $(this).data();
+        
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/delete/'+id.id
+        }).then(function (data) {
+            console.log(data);
+            console.log('I made it');
+            $(this).parents('li').empty();
+        })
+    });
 
     $('.card').on('click', '.deleteButton', function () {
         event.preventDefault();
