@@ -3,41 +3,57 @@ $(document).ready(function () {
     $('#noteModal').on('click', function () {
         let id = $(this).parents('.card').data();
         console.log(id);
+        $('.saveButton').attr('data-id', id._id);
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/note/'+id._id
+        }).then(function (data) {
+            // Create note LIs
+            console.log(data);
+            for (let i=0; i<data.note.length; i++) {
+                console.log(data.note[i]);
+                
+                let ul = $('.noteList');
+                let li = $('<li>').addClass('list-group-item').text(data.note[i].text);
+                let div = $('<div>').addClass('row justify-content-end');
+                let button = $('<button type="button" class="btn btn-sm btn-danger deleteNote">').text('X').attr('data-id', data.note[i]._id).addClass('');
+
+                ul.append(li);
+                div.append(button);
+                li.append(div);
+            }
+        });
         $('#myModal').modal('show');
     });
 
-    // var modal = document.getElementById('myModal');
+    $('.saveButton').on('click', function () {
+        event.preventDefault();
 
-    // // Get the button that opens the modal
-    // var btn = document.getElementById("noteModal");
+        let note = $('textarea').val().trim();
+        let id = $(this).data();
+        console.log(id);
+        console.log(note);
 
-    // // Get the <span> element that closes the modal
-    // var span = document.getElementsByClassName("close")[0];
-
-    // // When the user clicks on the button, open the modal 
-    // btn.onclick = function () {
-    //     modal.style.display = "block";
-    // }
-
-    // // When the user clicks on <span> (x), close the modal
-    // span.onclick = function () {
-    //     modal.style.display = "none";
-    // }
-
-    // // When the user clicks anywhere outside of the modal, close it
-    // window.onclick = function (event) {
-    //     if (event.target == modal) {
-    //         modal.style.display = "none";
-    //     }
-    // }
+        $.ajax({
+            type: 'POST',
+            url: '/api/new/note/'+id.id,
+            data: {
+                note: note
+            }
+        }).then(function (data) {
+            console.log('Hey I came back');
+            $('#myModal').modal('hide');
+        })
+    })
 
     $('.card').on('click', '.deleteButton', function () {
         event.preventDefault();
         let id = $(this).parents('.card').data();
         console.log(id);
         $.ajax({
-            type: 'POST',
-            url: '/api/unsave/' + id.id
+            type: 'PUT',
+            url: '/api/unsave/' + id._id
         }).then(function (data) {
             console.log('Unsaved that Article');
             console.log('I should be gone');

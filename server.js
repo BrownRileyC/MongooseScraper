@@ -85,13 +85,21 @@ app.get('/api/scrape', function (req, res) {
   });
 });
 
-app.post('/api/note/:id', function (req, res) {
-  db.Note.create(req.body).then(function(data){
-    return db.Article.findByIdAndUpdate({_id:req.params.id},  {note: data._id}, {new: true})
+app.get('/api/note/:id', function (req, res) {
+  db.Article.findById(req.params.id).populate('note').then(function(dbNotes){
+    res.json(dbNotes);
+  });
+});
+
+app.post('/api/new/note/:id', function (req, res) {
+  console.log(req.body)
+  db.Note.create({text: req.body.note}).then(function(data){
+    return db.Article.findByIdAndUpdate({_id:req.params.id},  {$push: {note: data._id}}, {new: true})
   }).then(function(dbArticle){
+    console.log(dbArticle);
     res.json(dbArticle);
   });
-})
+});
 
 app.put('/api/save/:id', function (req, res) {
   db.Article.findByIdAndUpdate(req.params.id, {$set: {status: true}}).then(function(data) {
