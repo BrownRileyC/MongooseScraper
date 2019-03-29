@@ -2,6 +2,7 @@ $(document).ready(function () {
 
     $('#myModal').on('hidden.bs.modal', function (e) {
         $('.noteList').empty();
+        $('textarea').val("");
       })
 
     $('.noteModal').on('click', function () {
