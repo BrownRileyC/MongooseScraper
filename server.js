@@ -123,6 +123,14 @@ app.put('/api/unsave/:id', function (req, res) {
   });
 });
 
+app.delete('/api/remove', function (req, res) {
+  db.Article.deleteMany({status: false}, function(err) {
+    console.log(err);
+  }).then(function(data){
+    res.json(data);
+  })
+})
+
 // Start the server
 app.listen(PORT, function () {
   console.log("App running on port " + PORT + "!");

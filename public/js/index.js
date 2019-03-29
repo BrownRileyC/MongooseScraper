@@ -2,7 +2,7 @@ $(document).ready(function() {
     $('.scrapeButton').on('click', function(){
         event.preventDefault();
         $.get('/api/scrape', function(data){
-            console.log(data);
+            location.reload();
         });
     });
 
@@ -19,4 +19,13 @@ $(document).ready(function() {
         });
         $(this).parents('.card').empty();
     });
+
+    $('.clearButton').on('click', function () {
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/remove'
+        }).then(function() {
+            $('.article-card-holder').empty();
+        })
+    })
 });
